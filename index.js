@@ -2,7 +2,8 @@ import axios from 'axios';
 import fs from 'fs/promises';
 import readline from 'readline';
 import hitamlegam from './src/lomgo.js';
-import { HttpsProxyAgent } from 'https-proxy-agent';
+import pkg from 'https-proxy-agent';
+const { HttpsProxyAgent } = pkg;
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
