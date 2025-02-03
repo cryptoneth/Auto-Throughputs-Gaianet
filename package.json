@@ -1,8 +1,9 @@
 {
   "dependencies": {
     "axios": "^1.7.9",
-    "fs": "^0.0.1-security"
+    "https-proxy-agent": "^5.0.1" // Add this for proxy handling
   },
+  "type": "module", // Add this to use ES modules
   "name": "autothroughput-gaianet",
   "version": "1.0.0",
   "description": "Auto point gaianet",
