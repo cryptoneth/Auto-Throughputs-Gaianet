@@ -2,6 +2,7 @@ const axios = require("axios");
 const fs = require("fs");
 const readline = require("readline");
 const hitamlegam = require('./src/lomgo.js');
+const HttpsProxyAgent = require('https-proxy-agent'); // You need to install this package: npm install https-proxy-agent
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -10,7 +11,7 @@ const rli = readline.createInterface({
   output: process.stdout,
 });
 
-const processChats = async (NodeID) => {
+const processChats = async (NodeID, proxy) => {
   try {
     console.clear();
     console.log(
@@ -30,6 +31,9 @@ const processChats = async (NodeID) => {
 
     const totalChats = addressListArray.length - 11;
     console.log(`Total chats to process: ${totalChats}`);
+
+    // Create an agent for the proxy
+    const agent = new HttpsProxyAgent(proxy);
 
     for (let index = 11; index < addressListArray.length; index++) {
       const chet = addressListArray[index];
@@ -57,6 +61,7 @@ const processChats = async (NodeID) => {
               accept: "application/json",
               "Content-Type": "application/json",
             },
+            httpsAgent: agent, // Here we use the proxy agent
           }
         );
 
@@ -71,12 +76,12 @@ const processChats = async (NodeID) => {
     console.log(`? Completed processing ${totalChats} chats.`);
     console.log('⏩ Restarting the process...\n');
     await delay(2000);
-    processChats(NodeID);
+    processChats(NodeID, proxy); // Pass the proxy to the recursive call
   } catch (error) {
     console.error("Error: ", error);
     console.log('⏩ Restarting due to an error...\n');
     await delay(2000);
-    processChats(NodeID); 
+    processChats(NodeID, proxy); // Pass the proxy to the error recovery call
   }
 };
 
@@ -93,7 +98,17 @@ const processChats = async (NodeID) => {
       return;
     }
 
-    processChats(NodeID);
+    const proxy = await new Promise((resolve) =>
+      rli.question("↪ Enter your proxy URL (e.g., http://user:pass@host:port): ", (input) => resolve(input.trim()))
+    );
+
+    if (!proxy) {
+      console.error("🚫 Error: Proxy URL is required.");
+      rli.close();
+      return;
+    }
+
+    processChats(NodeID, proxy);
   } catch (error) {
     console.error("Error: ", error);
     rli.close();
