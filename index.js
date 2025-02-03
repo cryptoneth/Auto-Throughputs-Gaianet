@@ -1,8 +1,8 @@
-const axios = require("axios");
-const fs = require("fs");
-const readline = require("readline");
-const hitamlegam = require('./src/lomgo.js');
-const HttpsProxyAgent = require('https-proxy-agent'); // You need to install this package: npm install https-proxy-agent
+import axios from 'axios';
+import fs from 'fs';
+import readline from 'readline';
+import { HttpsProxyAgent } from 'https-proxy-agent';
+import hitamlegam from './src/lomgo.js';
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -26,8 +26,8 @@ const processChats = async (NodeID, proxy) => {
     console.log("🔄 Initializing...");
     console.log(hitamlegam);
 
-    const addressList = await fs.readFileSync("cersex.txt", "utf-8");
-    const addressListArray = await addressList.split("\n");
+    const addressList = await fs.promises.readFile("cersex.txt", "utf-8");
+    const addressListArray = addressList.split("\n");
 
     const totalChats = addressListArray.length - 11;
     console.log(`Total chats to process: ${totalChats}`);
