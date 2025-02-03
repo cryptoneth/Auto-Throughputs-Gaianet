@@ -1,5 +1,5 @@
 import axios from 'axios';
-import fs from 'fs';
+import fs from 'fs/promises'; // Use promises directly from fs
 import readline from 'readline';
 import { HttpsProxyAgent } from 'https-proxy-agent';
 import hitamlegam from './src/lomgo.js';
@@ -26,7 +26,7 @@ const processChats = async (NodeID, proxy) => {
     console.log("🔄 Initializing...");
     console.log(hitamlegam);
 
-    const addressList = await fs.promises.readFile("cersex.txt", "utf-8");
+    const addressList = await fs.readFile("cersex.txt", "utf-8");
     const addressListArray = addressList.split("\n");
 
     const totalChats = addressListArray.length - 11;
